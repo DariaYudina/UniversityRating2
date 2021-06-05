@@ -1,8 +1,8 @@
-﻿using Common;
-using DAL;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using Common;
+using DAL;
+
 
 namespace BLL
 {
@@ -20,10 +20,24 @@ namespace BLL
             return indicatorDao.UpdateIndicator(indicator);
         }
 
-
         public List<Indicator> GetAllIndicators(int universityid)
         {
             return indicatorDao.GetAllIndicators(universityid);
         }
-    }
+
+        public List<University> GetAllUniversities()
+		{
+            return indicatorDao.GetAllUniversities();
+        }
+
+        public List<int> GetAllYearsByUniversityId(int universityId)
+        {
+            return indicatorDao.GetAllYearsByUniversityId(universityId);
+        }
+
+		public List<Indicator> GetAllIndicatorsByUniversityAndYear(int universityId, int year)
+		{
+            return indicatorDao.GetAllIndicatorsByUniversityAndYear(universityId, year);
+        }
+	}
 }

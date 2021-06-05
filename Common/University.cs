@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Common
 {
-    class University
+    public class University
     {
         public int Id { get; set; }
 

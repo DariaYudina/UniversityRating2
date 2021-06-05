@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Text;
+using System.Text.Json;
 
 namespace DAL
 {
@@ -49,12 +49,12 @@ namespace DAL
                 }
                 catch
                 {
-                    throw new Exception("layer = DAL, class = UserDBDao, method = AddUser");
+                    throw new Exception($"layer = DAL, class = {nameof(IndicatorDao)}, method = {nameof(UpdateIndicator)}");
                 }
             }
         }
 
-        public List<Indicator> GetAllIndicators(int universitiid)
+        public List<Indicator> GetAllIndicators(int universityd)
         {
             string sqlExpression = "GetAllIndicators";
             List<Indicator> indicators = new List<Indicator>();
@@ -71,7 +71,7 @@ namespace DAL
                     SqlParameter id = new SqlParameter
                     {
                         ParameterName = "@UniversityId",
-                        Value = universitiid
+                        Value = universityd
                     };
 
                     command.Parameters.Add(id);
@@ -81,27 +81,154 @@ namespace DAL
 
                     while (reader.Read())
                     {
-                        Indicator indicator = new Indicator()
-                        {
-                            IndicatorId = (int)reader.GetValue(0),
-                            UniversityId = (int)reader.GetValue(1),
-                            IndicatorName = (string)reader.GetValue(2),
-                            Value = (int)reader.GetValue(3),
-                            UnitOfMeasure = (string)reader.GetValue(4),
-                            UniversityName = (string)reader.GetValue(5),
-                            Year = (int)reader.GetValue(6)
-                        };
+                        var indicator = GetIndicator(reader);
 
                         indicators.Add(indicator);
                     }
                 }
                 catch
                 {
-                    throw new Exception("layer = DAL, class = UserDBDao, method = GetAllIndicators");
+                    throw new Exception($"layer = DAL, class = {nameof(IndicatorDao)}, method = {nameof(GetAllIndicators)}");
                 }
             }
 
             return indicators;
+        }
+
+        public List<University> GetAllUniversities()
+		{
+            var sqlExpression = "GetAllUniversities";
+            var universities = new List<University>();
+            using (var connection = new SqlConnection(connectionstring))
+            {
+                try
+                {
+                    connection.Open();
+                    var command = new SqlCommand(sqlExpression, connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+
+                    var reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        University university = new University()
+                        {
+                            Id = (int)reader.GetValue(0),
+                            UniversityName = (string)reader.GetValue(1),
+                        };
+
+                        universities.Add(university);
+                    }
+                }
+                catch
+                {
+                    throw new Exception($"layer = DAL, class = {nameof(IndicatorDao)}, method = {nameof(GetAllUniversities)}");
+                }
+            }
+
+            return universities;
+        }
+
+        public List<int> GetAllYearsByUniversityId(int universityId)
+		{
+            var sqlExpression = "GetAllYearsByUniversityId";
+            var years = new List<int>();
+            using (var connection = new SqlConnection(connectionstring))
+            {
+                try
+                {
+                    connection.Open();
+                    var command = new SqlCommand(sqlExpression, connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    SqlParameter id = new SqlParameter
+                    {
+                        ParameterName = "@UniversityId",
+                        Value = universityId
+                    };
+
+                    var reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+
+                        var year = (int)reader.GetValue(0);
+
+                        years.Add(year);
+                    }
+                }
+                catch
+                {
+                    throw new Exception($"layer = DAL, class = {nameof(IndicatorDao)}, method = {nameof(GetAllYearsByUniversityId)}");
+                }
+            }
+
+            return years;
+        }
+
+        public List<Indicator> GetAllIndicatorsByUniversityAndYear(int universityId, int year)
+        {
+            var sqlExpression = "GetAllIndicatorsByUniversityAndYear";
+            var indicators = new List<Indicator>();
+            using (var connection = new SqlConnection(connectionstring))
+            {
+                try
+                {
+                    connection.Open();
+                    var command = new SqlCommand(sqlExpression, connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+
+                    var idParam = new SqlParameter
+                    {
+                        ParameterName = "@UniversityId",
+                        Value = universityId
+                    };
+                    var yearsParam = new SqlParameter
+                    {
+                        ParameterName = "@Year",
+                        Value = year
+                    };
+
+                    command.Parameters.Add(idParam);
+                    command.Parameters.Add(yearsParam);
+
+                    var reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        var indicator = GetIndicator(reader);
+
+                        indicators.Add(indicator);
+                    }
+                }
+                catch
+                {
+                    throw new Exception($"layer = DAL, class = {nameof(IndicatorDao)}, method = {nameof(GetAllIndicatorsByUniversityAndYear)}");
+                }
+            }
+
+            return indicators;
+        }
+
+        private Indicator GetIndicator(SqlDataReader reader)
+        {
+            Indicator indicator = new Indicator()
+            {
+                IndicatorId = (int)reader.GetValue(0),
+                UniversityId = (int)reader.GetValue(1),
+                IndicatorName = (string)reader.GetValue(2),
+                Value = (int)reader.GetValue(3),
+                UnitOfMeasure = (string)reader.GetValue(4),
+                UniversityName = (string)reader.GetValue(5),
+                Year = (int)reader.GetValue(6)
+            };
+
+            return indicator;
         }
     }
 }

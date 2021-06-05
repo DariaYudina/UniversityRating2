@@ -9,5 +9,8 @@ namespace BLL
     {
         List<Indicator> GetAllIndicators(int universityid);
         bool UpdateIndicator(Indicator indicator);
+        List<University> GetAllUniversities();
+        List<int> GetAllYearsByUniversityId(int universityId);
+        List<Indicator> GetAllIndicatorsByUniversityAndYear(int universityId, int year);
     }
 }

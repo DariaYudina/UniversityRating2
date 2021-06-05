@@ -1,7 +1,5 @@
 ﻿using Common;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DAL
 {
@@ -9,5 +7,8 @@ namespace DAL
     {
         List<Indicator> GetAllIndicators(int universitiid);
         bool UpdateIndicator(Indicator indicator);
+		List<University> GetAllUniversities();
+		List<int> GetAllYearsByUniversityId(int universityId);
+        List<Indicator> GetAllIndicatorsByUniversityAndYear(int universityId, int year);
     }
 }
