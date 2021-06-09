@@ -173,6 +173,7 @@ namespace DAL
         {
             var sqlExpression = "GetAllIndicatorsByUniversityAndYear";
             var indicators = new List<Indicator>();
+
             using (var connection = new SqlConnection(connectionstring))
             {
                 try
@@ -188,14 +189,55 @@ namespace DAL
                         ParameterName = "@UniversityId",
                         Value = universityId
                     };
-                    var yearsParam = new SqlParameter
+                    var yearParam = new SqlParameter
                     {
                         ParameterName = "@Year",
                         Value = year
                     };
 
                     command.Parameters.Add(idParam);
-                    command.Parameters.Add(yearsParam);
+                    command.Parameters.Add(yearParam);
+
+                    var reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        var indicator = GetIndicator(reader);
+
+                        indicators.Add(indicator);
+                    }
+                }
+                catch
+                {
+                    throw new Exception($"layer = DAL, class = {nameof(IndicatorDao)}, method = {nameof(GetAllIndicatorsByUniversityAndYear)}");
+                }
+            }
+
+            return indicators;
+        }
+
+        public List<Indicator> GetAllIndicatorsByUniversity(int universityId)
+        {
+            var sqlExpression = "GetAllIndicatorsByUniversity";
+            var indicators = new List<Indicator>();
+
+            using (var connection = new SqlConnection(connectionstring))
+            {
+                try
+                {
+                    connection.Open();
+                    var command = new SqlCommand(sqlExpression, connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+
+                    var idParam = new SqlParameter
+                    {
+                        ParameterName = "@UniversityId",
+                        Value = universityId
+                    };
+
+                    command.Parameters.Add(idParam);
 
                     var reader = command.ExecuteReader();
 
