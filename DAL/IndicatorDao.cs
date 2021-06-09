@@ -150,6 +150,8 @@ namespace DAL
                         Value = universityId
                     };
 
+                    command.Parameters.Add(id);
+
                     var reader = command.ExecuteReader();
 
                     while (reader.Read())
