@@ -1,6 +1,7 @@
 ﻿using BLL;
 using Common;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace UniversityRating.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IIndicatorLogic indicatorLogic;
 
+
         public HomeController(ILogger<HomeController> logger, IIndicatorLogic indicatorLogic)
         {
             _logger = logger;
@@ -24,7 +26,10 @@ namespace UniversityRating.Controllers
 
         public IActionResult Index(int universityId = 1)
         {
+            var years = indicatorLogic.GetAllYearsByUniversityId(universityId);
+            var universities = indicatorLogic.GetAllUniversities();
             var indicators = indicatorLogic.GetAllIndicators(universityId);
+
             List<IndicatorVM> indicatorsVM = indicators.Select(o =>
             new IndicatorVM
             {
@@ -36,6 +41,8 @@ namespace UniversityRating.Controllers
                 UniversityName = o.UniversityName,
                 Year = o.Year
             }).ToList();
+            ViewBag.Universities = new SelectList(universities, "Id", "UniversityName");
+            ViewBag.Years = new SelectList(years);
             return View(indicatorsVM);
         }
 

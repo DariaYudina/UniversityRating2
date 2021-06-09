@@ -8,6 +8,18 @@
 </div>
 <div style=" display: flex; justify-content: center;">
     <form method="post" asp-action="Calculate" asp-controller="Home" id="indicatorForm">
+        <div>
+            <label asp-for="@Model[0].UniversityId">Университеты</label>
+            <select asp-for="@Model[0].UniversityId" asp-items="ViewBag.Universities">
+                <option selected="selected" disabled="disabled">Выберите университет</option>
+            </select>
+        </div>
+        <div>
+            <label asp-for="@Model[0].Year">Университеты</label>
+            <select asp-for="@Model[0].Year" asp-items="ViewBag.Years">
+                <option selected="selected" disabled="disabled">Выберите год</option>
+            </select>
+        </div>
         <table>
             <tr>
                 <th>Показатель</th>
@@ -17,50 +29,50 @@
                 <th>Показатель</th>
                 <th>Значение</th>
             </tr>
-            @for (int i = 0; i < Model.Count; i+=3)
+            @for (int i = 0; i < Model.Count; i += 3)
             {
-                
-        <tr>
-            @if (i < Model.Count)
-            {
-                <td>@Model[i].IndicatorName</td>
-                <td><input asp-for="@Model[i].Value" value="@Model[i].Value" class="indicatorInput" /></td>
-                <input type="hidden" asp-for="@Model[i].Year" value="@Model[i].Year" class="indicatorInput" />
+
+                <tr>
+                    @if (i < Model.Count)
+                    {
+                        <td>@Model[i].IndicatorName</td>
+                        <td><input asp-for="@Model[i].Value" value="@Model[i].Value" class="indicatorInput" /></td>
+                        <input type="hidden" asp-for="@Model[i].Year" value="@Model[i].Year" class="indicatorInput" />
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td></td>
+                    }
+                    @if (i + 1 < Model.Count)
+                    {
+                        <td>@Model[i + 1].IndicatorName</td>
+                        <td><input asp-for="@Model[i+1].Value" value="@Model[i+1].Value" class="indicatorInput" /></td>
+                        <input type="hidden" asp-for="@Model[i+1].Year" value="@Model[i+1].Year" class="indicatorInput" />
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td></td>
+                    }
+                    @if (i + 2 < Model.Count)
+                    {
+                        <td>@Model[i + 2].IndicatorName</td>
+                        <td><input asp-for="@Model[i+2].Value" value="@Model[i+2].Value" class="indicatorInput" /></td>
+                        <input type="hidden" asp-for="@Model[i+2].Year" value="@Model[i+2].Year" class="indicatorInput" />
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td></td>
+                    }
+                </tr>
             }
-            else
-            {
-                <td></td>
-                <td></td>
-            }
-            @if (i + 1 < Model.Count)
-            {
-                <td>@Model[i + 1].IndicatorName</td>
-                <td><input asp-for="@Model[i+1].Value" value="@Model[i+1].Value" class="indicatorInput" /></td>
-                <input type="hidden"  asp-for="@Model[i+1].Year" value="@Model[i+1].Year" class="indicatorInput" />
-            }
-            else
-            {
-                <td></td>
-                <td></td>
-            }
-            @if (i + 2 < Model.Count)
-            {
-                <td>@Model[i + 2].IndicatorName</td>
-                <td><input asp-for="@Model[i+2].Value" value="@Model[i+2].Value" class="indicatorInput" /></td>
-                <input type="hidden" asp-for="@Model[i+2].Year" value="@Model[i+2].Year" class="indicatorInput" />
-            }
-            else
-            {
-                <td></td>
-                <td></td>
-            }
-        </tr>
-            }
-        <tr>
-            <td colspan="3" style=" text-align:center;"><input type="button" value="Сохранить" onclick="submitIndicators()" /></td>
-            @*<td colspan="3"><input type="submit" value="Cохранить" onclick="submitIndicators()" /></td>*@
-            <td colspan="3"><input type="submit" value="Расчитать" /></td>
-        </tr>
+            <tr>
+                <td colspan="3" style=" text-align:center;"><input type="button" value="Сохранить" onclick="submitIndicators()" /></td>
+                @*<td colspan="3"><input type="submit" value="Cохранить" onclick="submitIndicators()" /></td>*@
+                <td colspan="3"><input type="submit" value="Расчитать" /></td>
+            </tr>
         </table>
     </form>
 </div>
