@@ -86,7 +86,7 @@ namespace DAL
                         indicators.Add(indicator);
                     }
                 }
-                catch
+                catch(Exception e)
                 {
                     throw new Exception($"layer = DAL, class = {nameof(IndicatorDao)}, method = {nameof(GetAllIndicators)}");
                 }
@@ -253,6 +253,53 @@ namespace DAL
                 catch
                 {
                     throw new Exception($"layer = DAL, class = {nameof(IndicatorDao)}, method = {nameof(GetAllIndicatorsByUniversityAndYear)}");
+                }
+            }
+
+            return indicators;
+        }
+
+        public List<Indicator> GetIndicatorsByIdAndUniversity(int universityd, int indicatorId)
+        {
+            string sqlExpression = "GetIndicatorsByIdAndUniversity";
+            List<Indicator> indicators = new List<Indicator>();
+            using (SqlConnection connection = new SqlConnection(connectionstring))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(sqlExpression, connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+
+                    SqlParameter id = new SqlParameter
+                    {
+                        ParameterName = "@UniversityId",
+                        Value = universityd
+                    };
+                    SqlParameter indicatorIdParam = new SqlParameter
+                    {
+                        ParameterName = "@IndicatorId",
+                        Value = universityd
+                    };
+
+                    command.Parameters.Add(id);
+                    command.Parameters.Add(indicatorIdParam);
+
+                    SqlDataReader reader;
+                    reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        var indicator = GetIndicator(reader);
+
+                        indicators.Add(indicator);
+                    }
+                }
+                catch(Exception e)
+                {
+                    throw new Exception($"layer = DAL, class = {nameof(IndicatorDao)}, method = {nameof(GetAllIndicators)}");
                 }
             }
 

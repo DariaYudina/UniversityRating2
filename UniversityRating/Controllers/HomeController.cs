@@ -55,6 +55,26 @@ namespace UniversityRating.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public IActionResult CalculateColumn()
+        {
+            var indicators = indicatorLogic.GetAllIndicatorsByUniversityAndYear(1, 2018);
+
+            List<IndicatorVM> indicatorsVM = indicators.Select(o =>
+            new IndicatorVM
+            {
+                IndicatorId = o.IndicatorId,
+                UniversityId = o.UniversityId,
+                IndicatorName = o.IndicatorName,
+                Value = o.Value,
+                UnitOfMeasure = o.UnitOfMeasure,
+                UniversityName = o.UniversityName,
+                Year = o.Year
+            }).ToList();
+            return View("ColumnChartRatings", indicatorsVM);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult UpdateIndicator(List<IndicatorVM> indicators)
         {
             var x = 1;
