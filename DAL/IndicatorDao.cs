@@ -261,6 +261,13 @@ namespace DAL
 
         private Indicator GetIndicator(SqlDataReader reader)
         {
+            var IndicatorId = (int)reader.GetValue(0);
+            var UniversityId = (int)reader.GetValue(1);
+            var IndicatorName = (string)reader.GetValue(2);
+            var Value = (int)reader.GetValue(3);
+            var UnitOfMeasure = (string)reader.GetValue(4);
+            var UniversityName = (string)reader.GetValue(5);
+            var Year = (int)reader.GetValue(6);
             Indicator indicator = new Indicator()
             {
                 IndicatorId = (int)reader.GetValue(0),
@@ -273,6 +280,53 @@ namespace DAL
             };
 
             return indicator;
+        }
+
+        public List<Indicator> GetAllIndicatorsByUniversityAndIndicatorId(int universityId, int indicatorId)
+        {
+            var sqlExpression = "GetAllIndicatorsByUniversityAndIndicatorId";
+            var indicators = new List<Indicator>();
+
+            using (var connection = new SqlConnection(connectionstring))
+            {
+                try
+                {
+                    connection.Open();
+                    var command = new SqlCommand(sqlExpression, connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+
+                    var idParam = new SqlParameter
+                    {
+                        ParameterName = "@UniversityId",
+                        Value = universityId
+                    };
+                    var indIdParam = new SqlParameter
+                    {
+                        ParameterName = "@IndicatorId",
+                        Value = indicatorId
+                    };
+
+                    command.Parameters.Add(idParam);
+                    command.Parameters.Add(indIdParam);
+
+                    var reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        var indicator = GetIndicator(reader);
+
+                        indicators.Add(indicator);
+                    }
+                }
+                catch(Exception e)
+                {
+                    throw new Exception($"{e.Message} layer = DAL , class = {nameof(IndicatorDao)}, method = {nameof(GetAllIndicatorsByUniversityAndIndicatorId)}");
+                }
+            }
+
+            return indicators;
         }
     }
 }

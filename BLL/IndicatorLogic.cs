@@ -44,5 +44,10 @@ namespace BLL
 		{
             return indicatorDao.GetAllIndicatorsByUniversity(universityId);
         }
+
+        public List<Indicator> GetAllIndicatorsByUniversityAndIndicatorId(int universityId, int indicatorId)
+        {
+            return indicatorDao.GetAllIndicatorsByUniversityAndIndicatorId(universityId, indicatorId);
+        }
     }
 }

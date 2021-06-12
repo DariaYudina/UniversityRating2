@@ -12,6 +12,7 @@ namespace BLL
         List<University> GetAllUniversities();
         List<int> GetAllYearsByUniversityId(int universityId);
         List<Indicator> GetAllIndicatorsByUniversityAndYear(int universityId, int year);
+        List<Indicator> GetAllIndicatorsByUniversityAndIndicatorId(int universityId, int indicatorId);
         List<Indicator> GetAllIndicatorsByUniversity(int universityId);
     }
 }

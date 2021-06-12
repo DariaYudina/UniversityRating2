@@ -29,8 +29,17 @@ namespace UniversityRating.Controllers
             var years = indicatorLogic.GetAllYearsByUniversityId(universityId);
             var universities = indicatorLogic.GetAllUniversities();
             var indicators = indicatorLogic.GetAllIndicators(universityId);
+            var indicators2 = indicatorLogic.GetAllIndicatorsByUniversityAndIndicatorId(1, 1);
 
-            List<IndicatorVM> indicatorsVM = indicators.Select(o =>
+            List<IndicatorVM> indicatorsVM = SelectIndicatorVW(indicators);
+            ViewBag.Universities = new SelectList(universities, "Id", "UniversityName");
+            ViewBag.Years = new SelectList(years);
+            return View(indicatorsVM);
+        }
+
+        private static List<IndicatorVM> SelectIndicatorVW(List<Indicator> indicators)
+        {
+            return indicators.Select(o =>
             new IndicatorVM
             {
                 IndicatorId = o.IndicatorId,
@@ -41,9 +50,6 @@ namespace UniversityRating.Controllers
                 UniversityName = o.UniversityName,
                 Year = o.Year
             }).ToList();
-            ViewBag.Universities = new SelectList(universities, "Id", "UniversityName");
-            ViewBag.Years = new SelectList(years);
-            return View(indicatorsVM);
         }
 
         [HttpPost]
