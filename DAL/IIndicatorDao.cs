@@ -11,6 +11,6 @@ namespace DAL
 		List<int> GetAllYearsByUniversityId(int universityId);
         List<Indicator> GetAllIndicatorsByUniversityAndYear(int universityId, int year);
         List<Indicator> GetAllIndicatorsByUniversity(int universityId);
-        List<Indicator> GetAllIndicatorsByUniversityAndIndicatorId(int universityId, int indicatorId);
+        List<Indicator> GetIndicatorsByIdAndUniversity(int universityd, int indicatorId);
     }
 }

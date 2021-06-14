@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "University Rankings";
+}
+
+@model List<UniversityRating.Models.IndicatorVM>
+@{
+}
+
+<div class="text-center">
+    <h1 class="display-4">Basic Chart</h1>
+</div>
+
+<html>
+<head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+            google.charts.load('current', { packages: ['corechart', 'bar'] });
+            google.charts.setOnLoadCallback(drawBasic);
+
+            function drawBasic() {
+                var data = google.visualization.arrayToDataTable([
+                    ['Indicator', 'Value', { role: 'style' }, { role: 'annotation' }],
+                    @for(int i = 0; i < Model.Count; i++) {
+                        <text>['@Model[i].IndicatorName', @Model[i].Value, 'blue', '@Model[i].Value'],</text>
+                    }
+                ]);
+
+                var options = {
+                    title: 'University Ratings',
+                    hAxis: {
+                        title: 'Time of Day',
+                        viewWindow: {
+                            min: [0, 20, 0],
+                            max: [100, 40, 0]
+                        }
+                    },
+                    vAxis: {
+                        title: 'Unit of measure'
+                    }
+                };
+
+                var chart = new google.visualization.ColumnChart(
+                    document.getElementById('mychart'));
+
+                chart.draw(data, options);
+            }
+    </script>
+</head>
+<body>
+    <div id="mychart" style="width: 900px; height: 500px"></div>
+</body>
+</html>
