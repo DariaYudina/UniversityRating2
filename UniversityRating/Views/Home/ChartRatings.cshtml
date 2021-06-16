@@ -14,13 +14,14 @@
     {
         sum += Model[i].Value;
         predictValues.Add(new IndicatorVM() { Value = sum / (i + 1), Year = year });
+        predictValues.Add(new IndicatorVM() { Value = sum / (i + 1), Year = Model[i].Year });
         year++;
     }
 }
 <div class="text-center">
-    <h2 class="display-5">Графики изменения показателя во времени и прогноза</h2>
-    <h3 class="display-5">Наименование показателя</h3>
-    <h3 class="display-5">@Model[0].IndicatorName</h3>
+    <h5 class="display-6" style="text-weight: bold;">Графики показателей эффективности вуза</h5>
+    <h6 class="display-5" style="text-align: left;">Наименование показателя:</h6>
+    <p class="display-5" style="text-align: justify">@Model[0].IndicatorName</p>
 </div>
 <div class="flexcont">
     @*<div id="mychart" style="width: 900px; height: 500px"></div>*@

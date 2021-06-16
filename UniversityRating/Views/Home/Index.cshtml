@@ -16,7 +16,7 @@
         </div>
         <div>
             <label asp-for="@Model[0].Year">Годы</label>
-            <select asp-for="@Model[0].Year" asp-items="ViewBag.Years">
+            <select asp-for="@Model[0].Year" asp-items="ViewBag.Years" id="YearsId">
                 <option selected="selected" disabled="disabled">Выберите год</option>
             </select>
         </div>
@@ -24,16 +24,18 @@
             <tr>
                 <th>Показатель</th>
                 <th>Значение</th>
+                <th>Единицы измерения</th>
                 <th>Рассчитать</th>
 
                 <th>Показатель</th>
                 <th>Значение</th>
+                <th>Единицы измерения</th>
                 <th>Рассчитать</th>
 
                 <th>Показатель</th>
                 <th>Значение</th>
+                <th>Единицы измерения</th>
                 <th>Рассчитать</th>
-
             </tr>
             @for (int i = 0; i < Model.Count; i += 3)
             {
@@ -43,6 +45,7 @@
             {
                 <td>@Model[i].IndicatorName</td>
                 <td><input asp-for="@Model[i].Value" value="@Model[i].Value" class="indicatorInput" /></td>
+                <td>@Model[i].UnitOfMeasure</td>
                 <input type="hidden" asp-for="@Model[i].Year" value="@Model[i].Year" class="indicatorInput" />
                 <input type="hidden" asp-for="@Model[i].IndicatorId" value="@Model[i].IndicatorId" />
                 <td>
@@ -56,11 +59,13 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
             }
             @if (i + 1 < Model.Count)
             {
                 <td>@Model[i + 1].IndicatorName</td>
                 <td><input asp-for="@Model[i+1].Value" value="@Model[i+1].Value" class="indicatorInput" /></td>
+                <td>@Model[i].UnitOfMeasure</td>
                 <input type="hidden" asp-for="@Model[i+1].Year" value="@Model[i+1].Year" class="indicatorInput" />
                 <input type="hidden" asp-for="@Model[i+1].IndicatorId" value="@Model[i+1].IndicatorId" />
                 <td>
@@ -74,11 +79,13 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
             }
             @if (i + 2 < Model.Count)
             {
                 <td>@Model[i + 2].IndicatorName</td>
                 <td><input asp-for="@Model[i+2].Value" value="@Model[i+2].Value" class="indicatorInput" /></td>
+                <td>@Model[i].UnitOfMeasure</td>
                 <input type="hidden" asp-for="@Model[i+2].Year" value="@Model[i+2].Year" class="indicatorInput" />
                 <input type="hidden" asp-for="@Model[i+2].IndicatorId" value="@Model[i+2].IndicatorId" />
                 <td>
@@ -92,18 +99,19 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
             }
         </tr>
             }
-            <tr>
-                <td colspan="4" style=" text-align:center;"><input type="button" value="Сохранить" onclick="OnServer_isUniverce()" /></td>
+            @*<tr>*@
+                @*<td colspan="12" style=" text-align:center;"><input type="button" value="Сохранить" onclick="OnServer_isUniverce()" /></td>*@
                 @*<td colspan="3"><input type="submit" value="Cохранить" onclick="submitIndicators()" /></td>*@
-                <td colspan="5">
+                @*<td colspan="5">
                     <a asp-controller="Home" asp-action="CalculateColumn">
                         <input type="submit" value="Расчитать" />
                     </a>
-                </td>
-            </tr>
+                </td>*@
+            @*</tr>*@
         </table>
     </form>
     <img id="1" />
@@ -161,6 +169,25 @@
             //        }
             //    });
             //}
-        
+
+            $(function () {
+            $("#YearsId").change(function () {
+                var url = '@Url.Content("~/")' + "Tour/RegionList";
+                var ddlsource = "#CountryId";
+                $.getJSON(url, { id: $(ddlsource).val() }, function (data) {
+                    var items = "<option disabled selected>Выберите регион</option>";
+                    $("#RegionId").empty();
+                    $("#DistrictId").empty();
+                    $("#CityId").empty();
+                    $.each(data, function (i, row) {
+                        items += "<option value='" + row.value + "'>" + row.text + "</option>";
+                    });
+                    $("#RegionId").html(items);
+                    $("#RegionBlock").show();
+                    $("#DistrictBlock").hide();
+                    $("#CityBlock").hide();
+                })
+            });
+        });
     </script>
 } 
