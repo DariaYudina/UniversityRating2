@@ -261,7 +261,7 @@ namespace DAL
 
         public List<Indicator> GetIndicatorsByIdAndUniversity(int universityd, int indicatorId)
         {
-            string sqlExpression = "GetIndicatorsByIdAndUniversity";
+            string sqlExpression = "GetIndicatorByIdAndUniversity";
             List<Indicator> indicators = new List<Indicator>();
             using (SqlConnection connection = new SqlConnection(connectionstring))
             {

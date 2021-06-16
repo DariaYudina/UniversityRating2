@@ -24,77 +24,103 @@
             <tr>
                 <th>Показатель</th>
                 <th>Значение</th>
+                <th>Рассчитать</th>
+
                 <th>Показатель</th>
                 <th>Значение</th>
+                <th>Рассчитать</th>
+
                 <th>Показатель</th>
                 <th>Значение</th>
+                <th>Рассчитать</th>
+
             </tr>
             @for (int i = 0; i < Model.Count; i += 3)
             {
 
-                <tr>
-                    @if (i < Model.Count)
-                    {
-                        <td>@Model[i].IndicatorName</td>
-                        <td><input asp-for="@Model[i].Value" value="@Model[i].Value" class="indicatorInput" /></td>
-                        <input type="hidden" asp-for="@Model[i].Year" value="@Model[i].Year" class="indicatorInput" />
-                    }
-                    else
-                    {
-                        <td></td>
-                        <td></td>
-
-                    }
-                    @if (i + 1 < Model.Count)
-                    {
-                        <td>@Model[i + 1].IndicatorName</td>
-                        <td><input asp-for="@Model[i+1].Value" value="@Model[i+1].Value" class="indicatorInput" /></td>
-                        <input type="hidden" asp-for="@Model[i+1].Year" value="@Model[i+1].Year" class="indicatorInput" />
-                    }
-                    else
-                    {
-                        <td></td>
-                        <td></td>
-
-                    }
-                    @if (i + 2 < Model.Count)
-                    {
-                        <td>@Model[i + 2].IndicatorName</td>
-                        <td><input asp-for="@Model[i+2].Value" value="@Model[i+2].Value" class="indicatorInput" /></td>
-                        <input type="hidden" asp-for="@Model[i+2].Year" value="@Model[i+2].Year" class="indicatorInput" />
-                    }
-                    else
-                    {
-                        <td></td>
-                        <td></td>
-
-                    }
-                </tr>
+        <tr>
+            @if (i < Model.Count)
+            {
+                <td>@Model[i].IndicatorName</td>
+                <td><input asp-for="@Model[i].Value" value="@Model[i].Value" class="indicatorInput" /></td>
+                <input type="hidden" asp-for="@Model[i].Year" value="@Model[i].Year" class="indicatorInput" />
+                <input type="hidden" asp-for="@Model[i].IndicatorId" value="@Model[i].IndicatorId" />
+                <td>
+                    <a asp-controller="Home" asp-action="CalculateIndicator" asp-route-id="@Model[i].IndicatorId" asp-route-unid="@Model[i].UniversityId">
+                        <input type="button" value="Расчитать" />
+                    </a>
+                </td>
+            }
+            else
+            {
+                <td></td>
+                <td></td>
+                <td></td>
+            }
+            @if (i + 1 < Model.Count)
+            {
+                <td>@Model[i + 1].IndicatorName</td>
+                <td><input asp-for="@Model[i+1].Value" value="@Model[i+1].Value" class="indicatorInput" /></td>
+                <input type="hidden" asp-for="@Model[i+1].Year" value="@Model[i+1].Year" class="indicatorInput" />
+                <input type="hidden" asp-for="@Model[i+1].IndicatorId" value="@Model[i+1].IndicatorId" />
+                <td>
+                    <a asp-controller="Home" asp-action="CalculateIndicator" asp-route-id="@Model[i+1].IndicatorId" asp-route-unid="@Model[i+1].UniversityId">
+                        <input type="button" value="Расчитать" />
+                    </a>
+                </td>
+            }
+            else
+            {
+                <td></td>
+                <td></td>
+                <td></td>
+            }
+            @if (i + 2 < Model.Count)
+            {
+                <td>@Model[i + 2].IndicatorName</td>
+                <td><input asp-for="@Model[i+2].Value" value="@Model[i+2].Value" class="indicatorInput" /></td>
+                <input type="hidden" asp-for="@Model[i+2].Year" value="@Model[i+2].Year" class="indicatorInput" />
+                <input type="hidden" asp-for="@Model[i+2].IndicatorId" value="@Model[i+2].IndicatorId" />
+                <td>
+                    <a asp-controller="Home" asp-action="CalculateIndicator" asp-route-id="@Model[i+2].IndicatorId" asp-route-unid="@Model[i+2].UniversityId">
+                        <input type="button" value="Расчитать" />
+                    </a>
+                </td>
+            }
+            else
+            {
+                <td></td>
+                <td></td>
+                <td></td>
+            }
+        </tr>
             }
             <tr>
-                <td colspan="3" style=" text-align:center;"><input type="button" value="Сохранить" onclick="submitIndicators()" /></td>
+                <td colspan="4" style=" text-align:center;"><input type="button" value="Сохранить" onclick="OnServer_isUniverce()" /></td>
                 @*<td colspan="3"><input type="submit" value="Cохранить" onclick="submitIndicators()" /></td>*@
-                <td colspan="3"><input type="submit" value="Расчитать" /></td>
-                <td></td>
-                <td></td>
+                <td colspan="4"><input type="submit" value="Расчитать" /></td>
                 <td></td>
             </tr>
         </table>
     </form>
+    <img id="1" />
+    <script src="~/js/myjquery.js"></script>
 </div>
 @section Scripts
 { 
     <script>
-        function submitIndicators() {
-            let indicatorForm = document.getElementsByClassName("valueIndicator");
+
+        function submitIndicators(id) {
+            let indicatorForm = document.getElementsByClassName("indicatorInput");
             let indicatorFormValue = [];
+            let id;
             for (var i = 0; i < indicatorForm.length; i++) {
                 indicatorFormValue[i] = indicatorForm[i].value;
             }
             alert(indicatorFormValue[0]);
 
             $.ajax({
-                url: "http://" + ip_sel_list + ":" + pt_sel_list + "/poct",
+                url: "http://127.0.0.1:5003/graf1",
                 mode: 'no-cors',
                 type: "POST",
                 contentType: "applicattion/json",
@@ -108,6 +134,31 @@
                     }
                 }
             });
-        }
+
+
+            //var one = document.getElementById('1');
+            ////----univerce
+            //function OnServer_isUniverce() {
+            //    let indicatorForm = document.getElementsByClassName("indicatorInput");
+            //    let indicatorFormValue = [];
+            //    for (var i = 0; i < indicatorForm.length; i++) {
+            //        indicatorFormValue[i] = indicatorForm[i].value * 0.0001;
+            //    }
+            //    let mass = [0.12, 0.14, 0.16, 0.18, 0.2, 0.22, 0.24, 0.26, 0.7, 0.3, 0.32, 0.5];
+            //    $.ajax({
+            //        url: "http://127.0.0.1:5003/graf1",
+            //        mode: 'no-cors',
+            //        type: "POST",
+            //        contentType: "applicattion/json",
+            //        dataType: "json",
+            //        data: JSON.stringify({
+            //            mss: mass
+            //        }),
+            //        success: function (message) {
+            //            one.src = "data:image/jpeg;base64," + message["type"].split("'")[1];
+            //        }
+            //    });
+            //}
+        
     </script>
 } 
