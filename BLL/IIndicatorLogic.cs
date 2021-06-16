@@ -8,6 +8,9 @@ namespace BLL
     public interface IIndicatorLogic
     {
         List<Indicator> GetAllIndicators(int universityid);
+        bool CreateIndicatorForUniversity(Indicator indicator);
+        bool UpdateIndicatorForUniversity(Indicator indicator);
+        bool CreateIndicator(Indicator indicator);
         bool UpdateIndicator(Indicator indicator);
         List<University> GetAllUniversities();
         List<int> GetAllYearsByUniversityId(int universityId);

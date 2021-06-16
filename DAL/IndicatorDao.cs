@@ -16,7 +16,62 @@ namespace DAL
             this.connectionstring = connectionstring;
         }
 
-        public bool UpdateIndicator(Indicator indicator)
+        public bool CreateIndicatorForUniversity(Indicator indicator)
+		{
+            string sqlExpression = "CreateIndicator";
+            using (SqlConnection connection = new SqlConnection(connectionstring))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(sqlExpression, connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+
+                    SqlParameter id = new SqlParameter
+                    {
+                        ParameterName = "@Indicator_Id",
+                        Value = indicator.IndicatorId
+                    };
+                    SqlParameter value = new SqlParameter
+                    {
+                        ParameterName = "@Value",
+                        Value = indicator.Value
+                    };
+                    SqlParameter university_id = new SqlParameter
+                    {
+                        ParameterName = "@University_Id",
+                        Value = indicator.IndicatorId
+                    };
+                    SqlParameter unitOfMeasure = new SqlParameter
+                    {
+                        ParameterName = "@UnitOfMeasure",
+                        Value = indicator.Value
+                    };
+                    SqlParameter yaer = new SqlParameter
+                    {
+                        ParameterName = "@Year",
+                        Value = indicator.Value
+                    };
+
+                    command.Parameters.Add(id);
+                    command.Parameters.Add(value);
+                    command.Parameters.Add(university_id);
+                    command.Parameters.Add(unitOfMeasure);
+                    command.Parameters.Add(yaer);
+
+                    var returnParameter = command.ExecuteNonQuery();
+                    return returnParameter > 0 ? true : false;
+                }
+                catch
+                {
+                    throw new Exception($"layer = DAL, class = {nameof(IndicatorDao)}, method = {nameof(CreateIndicatorForUniversity)}");
+                }
+            }
+        }
+
+        public bool UpdateIndicatorForUniversity(Indicator indicator)
         {
             string sqlExpression = "UpdateIndicator";
             using (SqlConnection connection = new SqlConnection(connectionstring))
@@ -39,6 +94,75 @@ namespace DAL
                     {
                         ParameterName = "@Value",
                         Value = indicator.Value
+                    };
+
+                    command.Parameters.Add(id);
+                    command.Parameters.Add(name);
+
+                    var returnParameter = command.ExecuteNonQuery();
+                    return returnParameter > 0 ? true : false;
+                }
+                catch
+                {
+                    throw new Exception($"layer = DAL, class = {nameof(IndicatorDao)}, method = {nameof(UpdateIndicatorForUniversity)}");
+                }
+            }
+        }
+
+        public bool CreateIndicator(Indicator indicator)
+        {
+            string sqlExpression = "CreateAbstractIndicator";
+            using (SqlConnection connection = new SqlConnection(connectionstring))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(sqlExpression, connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+
+                    SqlParameter name = new SqlParameter
+                    {
+                        ParameterName = "@Name",
+                        Value = indicator.IndicatorName
+                    };
+
+                    command.Parameters.Add(name);
+
+                    var returnParameter = command.ExecuteNonQuery();
+                    return returnParameter > 0 ? true : false;
+                }
+                catch
+                {
+                    throw new Exception($"layer = DAL, class = {nameof(IndicatorDao)}, method = {nameof(CreateIndicator)}");
+                }
+            }
+        }
+
+        public bool UpdateIndicator(Indicator indicator)
+        {
+            string sqlExpression = "UpdateAbstractIndicator";
+            using (SqlConnection connection = new SqlConnection(connectionstring))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(sqlExpression, connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+
+                    SqlParameter id = new SqlParameter
+                    {
+                        ParameterName = "@Id",
+                        Value = indicator.IndicatorId
+                    };
+
+                    SqlParameter name = new SqlParameter
+                    {
+                        ParameterName = "@Name",
+                        Value = indicator.IndicatorName
                     };
 
                     command.Parameters.Add(id);

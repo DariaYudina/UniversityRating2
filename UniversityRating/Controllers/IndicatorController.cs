@@ -1,4 +1,5 @@
 ﻿using BLL;
+using Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -22,7 +23,7 @@ namespace UniversityRating.Controllers
         // GET: IndicatorController
         public ActionResult Index()
         {
-            return View();
+            return View("Home", "Index");
         }
 
         public ActionResult Indicators(int universityId)
@@ -56,11 +57,34 @@ namespace UniversityRating.Controllers
         // POST: IndicatorController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(IndicatorVM indicator)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                indicatorLogic.CreateIndicatorForUniversity(MapToIndicator(indicator));
+                return RedirectToAction("Index", "Home");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: IndicatorController/CreateAbstract
+        public ActionResult CreateAbstract()
+        {
+            return View();
+        }
+
+        // POST: IndicatorController/CreateAbstract
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateAbstract(IndicatorVM indicator)
+        {
+            try
+            {
+                indicatorLogic.CreateIndicator(MapToIndicator(indicator));
+                return RedirectToAction("Index", "Home");
             }
             catch
             {
@@ -77,11 +101,38 @@ namespace UniversityRating.Controllers
         // POST: IndicatorController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, IndicatorVM indicator)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var updated = MapToIndicator(indicator);
+                updated.IndicatorId = id;
+                indicatorLogic.UpdateIndicator(updated);
+                return RedirectToAction("Index", "Home");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: IndicatorController/EditAbstract/5
+        public ActionResult EditAbstract(int id)
+        {
+            return View();
+        }
+
+        // POST: IndicatorController/EditAbstract/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditAbstract(int id, IndicatorVM indicator)
+        {
+            try
+            {
+                var updated = MapToIndicator(indicator);
+                updated.IndicatorId = id;
+                indicatorLogic.UpdateIndicator(updated);
+                return RedirectToAction("Index", "Home");
             }
             catch
             {
@@ -109,5 +160,18 @@ namespace UniversityRating.Controllers
                 return View();
             }
         }
+
+        private Indicator MapToIndicator(IndicatorVM indicator)
+		{
+            return new Indicator
+            {
+                IndicatorId = indicator.IndicatorId,
+                UniversityId = indicator.UniversityId,
+                Value = indicator.Value,
+                UnitOfMeasure = indicator.UnitOfMeasure,
+                Year = indicator.Year,
+                IndicatorName = indicator.IndicatorName
+            };
+		}
     }
 }
