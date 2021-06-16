@@ -4,13 +4,17 @@
 
 @model List<UniversityRating.Models.IndicatorVM>
 @{
-    List<int> predictValues = new List<int>();
+    List<IndicatorVM> predictValues = new List<IndicatorVM>();
     var srendn = Model.Sum(x => x.Value) / Model.Count;
     int sum = 0;
+    int lastYearIndex = Model.Count - 1;
+    int year = Model[Model.Count - 1].Year;
+
     for (int i = 0; i < Model.Count; i++)
     {
         sum += Model[i].Value;
-        predictValues.Add(sum / (i + 1));
+        predictValues.Add(new IndicatorVM() { Value = sum / (i + 1), Year = year });
+        year++;
     }
 }
 <div class="text-center">
@@ -19,16 +23,16 @@
     <h3 class="display-5">@Model[0].IndicatorName</h3>
 </div>
 <div class="flexcont">
-    <div id="mychart" style="width: 900px; height: 500px"></div>
+    @*<div id="mychart" style="width: 900px; height: 500px"></div>*@
+    <div id="chart_div"></div>
 </div>
 @section Scripts{
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
         google.charts.load('current', { 'packages': ['corechart'] });
         google.charts.setOnLoadCallback(drawChart);
-
         function drawChart() {
-            var data = google.visualization.arrayToDataTable([
+            @*var data = google.visualization.arrayToDataTable([
                 ['Year', 'Статистические значения', 'Прогнозируемые значения'],
                 @foreach (var data in Model) {
                     @foreach (var predict in predictValues)
@@ -36,29 +40,39 @@
                             <text>['@data.Year', @data.Value, @predict],</text>
                         }
                     }
+            ]);*@
+            var data1 = new google.visualization.DataTable();
+            data1.addColumn('date', 'Year');
+            data1.addColumn('number', 'Статистические значения');
+            data1.addRows([
+                 @foreach (var data in Model) {
+                      <text>[new Date(@data.Year, 0, 0), @data.Value],</text>
+                    }
             ]);
 
-           //var data = google.visualization.arrayToDataTable([
-           //    ['Year', 'Rating'],
-           //    ['2004', 1000],
-           //    ['2005', 1000],
-           //    ['2006', 1000],
-           //    ['2007', 1000]
-           // ]);
+            var data2 = new google.visualization.DataTable();
+            data2.addColumn('date', 'Year');
+            data2.addColumn('number', 'Прогнозируемые значения');
+            data2.addRows([
+                 @foreach (var data in predictValues) {
+                      <text>[new Date(@data.Year, 0, 0), @data.Value],</text>
+                    }
+            ]);
+            var joinedData = google.visualization.data.join(data1, data2, 'full', [[0, 0]], [1], [1]);
+            var chart = new google.visualization.LineChart(document.querySelector('#chart_div'));
+            chart.draw(joinedData, {
+                height: 500,
+                width: 1100,
+                interpolateNulls: true
+            });
+            //var options = {
+            //    title: 'Изменение показателя вуза во времени',
+            //    curveType: 'function',
+            //    legend: { position: 'bottom' }
+            //};
 
-            var options = {
-                title: 'Изменение показателя вуза во времени',
-                curveType: 'function',
-                legend: { position: 'bottom' }
-            };
-
-            var chart = new google.visualization.LineChart(document.getElementById('mychart'));
-            chart.draw(data, options);
+            //var chart = new google.visualization.LineChart(document.getElementById('mychart'));
+            //chart.draw(data, options);
         }
-
-
-
     </script>
-
-
 }
