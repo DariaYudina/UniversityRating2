@@ -42,20 +42,20 @@
                     }
             ]);*@
             var data1 = new google.visualization.DataTable();
-            data1.addColumn('date', 'Year');
+            data1.addColumn('string', 'Year');
             data1.addColumn('number', 'Статистические значения');
             data1.addRows([
                  @foreach (var data in Model) {
-                      <text>[new Date(@data.Year, 0, 0), @data.Value],</text>
+                      <text>['@data.Year', @data.Value],</text>
                     }
             ]);
 
             var data2 = new google.visualization.DataTable();
-            data2.addColumn('date', 'Year');
+            data2.addColumn('string', 'Year');
             data2.addColumn('number', 'Прогнозируемые значения');
             data2.addRows([
                  @foreach (var data in predictValues) {
-                      <text>[new Date(@data.Year, 0, 0), @data.Value],</text>
+                      <text>['@data.Year', @data.Value],</text>
                     }
             ]);
             var joinedData = google.visualization.data.join(data1, data2, 'full', [[0, 0]], [1], [1]);

@@ -7,7 +7,7 @@
     <h4 class="display-5">@Model[0].UniversityName</h4>
 </div>
 <div style=" display: flex; justify-content: center;">
-    <form method="post" asp-action="Calculate" asp-controller="Home" id="indicatorForm">
+    <form method="post" asp-action="CalculateColumn" asp-controller="Home" id="indicatorForm">
         <div>
             <label asp-for="@Model[0].UniversityId">Университеты</label>
             <select asp-for="@Model[0].UniversityId" asp-items="ViewBag.Universities">
@@ -98,8 +98,11 @@
             <tr>
                 <td colspan="4" style=" text-align:center;"><input type="button" value="Сохранить" onclick="OnServer_isUniverce()" /></td>
                 @*<td colspan="3"><input type="submit" value="Cохранить" onclick="submitIndicators()" /></td>*@
-                <td colspan="4"><input type="submit" value="Расчитать" /></td>
-                <td></td>
+                <td colspan="5">
+                    <a asp-controller="Home" asp-action="CalculateColumn">
+                        <input type="submit" value="Расчитать" />
+                    </a>
+                </td>
             </tr>
         </table>
     </form>
