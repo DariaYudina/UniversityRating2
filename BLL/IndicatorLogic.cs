@@ -15,8 +15,22 @@ namespace BLL
             this.indicatorDao = indicatorDao;
         }
 
-        public bool UpdateIndicator(Indicator indicator)
+        public bool CreateIndicatorForUniversity(Indicator indicator)
         {
+            return indicatorDao.CreateIndicatorForUniversity(indicator);
+        }
+
+        public bool UpdateIndicatorForUniversity(Indicator indicator)
+        {
+            return indicatorDao.UpdateIndicatorForUniversity(indicator);
+        }
+
+        public bool CreateIndicator(Indicator indicator)
+		{
+            return indicatorDao.CreateIndicator(indicator);
+        }
+        public bool UpdateIndicator(Indicator indicator)
+		{
             return indicatorDao.UpdateIndicator(indicator);
         }
 
