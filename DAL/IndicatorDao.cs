@@ -281,7 +281,7 @@ namespace DAL
                     SqlParameter indicatorIdParam = new SqlParameter
                     {
                         ParameterName = "@IndicatorId",
-                        Value = universityd
+                        Value = indicatorId
                     };
 
                     command.Parameters.Add(id);
