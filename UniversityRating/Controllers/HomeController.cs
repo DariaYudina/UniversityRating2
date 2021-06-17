@@ -28,7 +28,7 @@ namespace UniversityRating.Controllers
         {
             var years = indicatorLogic.GetAllYearsByUniversityId(universityId);
             var universities = indicatorLogic.GetAllUniversities();
-            var indicators = indicatorLogic.GetAllIndicators(universityId);
+            var indicators = indicatorLogic.GetAllIndicatorsByUniversityAndYear(universityId, 2010);
 
             List<IndicatorVM> indicatorsVM = SelectIndicatorVW(indicators);
             ViewBag.Universities = new SelectList(universities, "Id", "UniversityName");
